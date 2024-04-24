@@ -1,12 +1,50 @@
 import React, { useState } from 'react';
 import SmallImage from '../Components/SmallImage';
+import axios from 'axios';
 
 function HomePage(props) {
     const [date] = useState(Date.now('dd/mm/yyyy'));
     console.log(date);
-    // const handleChange = (e) => {
-    //     setDate(e.target.value);
-    // };
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [eventType, setEventType] = useState('');
+    const [numOfGuests, setNumOfGuests] = useState('');
+    const [eventDate, setEventDate] = useState('');
+    const [eventTime, setEventTime] = useState('');
+    const [notFiled, setNotFiled] = useState(false);
+
+    const [responseMessage, setResponseMessage] = useState('');
+  
+    const handleSendData = async () => {
+        if (name === "" || email === "" || phone === "" || eventType === "" || numOfGuests === "# of Guests" || numOfGuests === "" || eventDate === "" || eventTime === "")
+        {
+            
+            setNotFiled(true);
+            return
+        }
+
+
+      const data = {
+        name: name,
+        email: email,
+        phone: phone,
+        eventType: eventType,
+        eventDate: eventDate,
+        eventTime: eventTime,
+        numOfGuests: numOfGuests
+      };
+  
+      try {
+        const response = await axios.post('http://localhost:8080/ess', data);
+        setResponseMessage(response.data);
+        if(responseMessage) console.log("Success!");
+      } catch (error) {
+        console.error('Error occurred:', error);
+      }
+    };
+  
 
     return (
         <>
@@ -60,23 +98,47 @@ function HomePage(props) {
                     <p className='pt-5 font-[Inder] tracking-wider  text-center text-l pl-10 pr-10 text-[#989898]'>
                         For more information fill out this form and we will reach out to you!
                     </p>
-                    <form className='font-[Inder] pl-10 pr-10 flex flex-col justify-center w-screen pt-10 gap-3 max-w-[700px]'>
-                        <input className='h-12 p-3 rounded-lg outline-none text-lg' required='true'type='name' name='name' placeholder='Full Name'/>
-                        <input className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='email' name='email' placeholder='Email'/>
-                        <input className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='phone' name='phone' placeholder='Phone number'/>
-                        <textarea className='h-24 p-3 rounded-lg outline-none text-lg'  required='true' type='text' name='text' placeholder='Event type: (B-day, wedding, grad, work, etc.)'/>
+                    
+                    <form className='mt-5 font-[Inder] pl-10 pr-10 flex flex-col justify-center w-screen pt-3 gap-3 max-w-[700px]'>
+                        <input onChange={(e)=>setName(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true'type='name' name='name' placeholder='Full Name'/>
+                        <input onChange={(e)=>setEmail(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='email' name='email' placeholder='Email'/>
+                        <input onChange={(e)=>setPhone(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='phone' name='phone' placeholder='Phone number'/>
+                        <textarea onChange={(e)=>setEventType(e.target.value)}  className='h-24 p-3 rounded-lg outline-none text-lg'  required='true' type='text' name='text' placeholder='Event type: (B-day, wedding, grad, work, etc.)'/>
                         {/* <input className='h-12 p-3 rounded-lg outline-none' required='true'  placeholder='Event Type'/> */}
-                        <select  id="dropdown" class="h-12 p-3 rounded-lg outline-none">
+                        <select onChange={(e)=>setNumOfGuests(e.target.value)}  id="dropdown" class="h-12 p-3 rounded-lg outline-none">
                             <option value="default"># of guests</option>
                             <option value="0-100">0-100</option>
                             <option value="100-500">100-500</option>
                             <option value="500+">500+</option>
                         </select>
                         <div className='flex gap-3'>
-                            <input type="date" id="eventDate" name="date" defaultValue={new Date().toISOString().split('T')[0]} class="flex-1 h-12 p-3 rounded-lg outline-none" required />
-                            <input type="time" id="eventDate" name="time" defaultValue={'12:00'} class="flex-1 h-12 p-3 rounded-lg outline-none" required />
+                            <input onChange={(e)=>setEventDate(e.target.value)}  type="date" id="eventDate" name="date"class="flex-1 h-12 p-3 rounded-lg outline-none" required />
+                            <input onChange={(e)=>{
+                                        const inputTime = e.target.value;
+                                        const timeParts = inputTime.split(':');
+                                        let hours = parseInt(timeParts[0], 10);
+                                        const minutes = timeParts[1];
+                                    
+                                        let suffix = 'AM';
+                                        if (hours >= 12) {
+                                          suffix = 'PM';
+                                          if (hours > 12) {
+                                            hours -= 12;
+                                          }
+                                        }
+                                        if (hours === 0) {
+                                          hours = 12;
+                                        }
+                                        const formattedTime = `${hours}:${minutes} ${suffix}`;
+                                    setEventTime(formattedTime)
+                                }} placeholder='' type="time" id="eventDate" name="time" class="flex-1 h-12 p-3 rounded-lg outline-none" required />
                         </div>
-                        <input className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg' required='true' type={'submit'} value={'Send'}/>
+
+                        {notFiled&&<p className='pt-2 pb-2 font-[Inder] tracking-wider  text-center text-l text-[#ff2a2a] bg-red-100 rounded-lg border-[#ff2a2a] border-2'>
+                            Opps you are missing something!<br></br>Please fill out everything!
+                        </p>}
+
+                        <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' required='true' type={'submit'} value={'Send'}/>
                     </form>
            </div>
 
