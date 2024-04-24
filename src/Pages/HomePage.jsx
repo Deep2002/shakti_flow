@@ -14,6 +14,8 @@ function HomePage(props) {
     const [eventDate, setEventDate] = useState('');
     const [eventTime, setEventTime] = useState('');
     const [notFiled, setNotFiled] = useState(false);
+    const [submissionSuccess, setSubmissionSuccess] = useState(false);
+    const [ErrorSendingEmail, setErrorSendingEmail] = useState(false);
 
     const [responseMessage, setResponseMessage] = useState('');
   
@@ -37,11 +39,16 @@ function HomePage(props) {
       };
   
       try {
-        const response = await axios.post('http://localhost:8080/ess', data);
+        const response = await axios.post('http://shaktiflowdj.com//ess', data);
         setResponseMessage(response.data);
-        if(responseMessage) console.log("Success!");
+        if(responseMessage) 
+        {
+            setSubmissionSuccess(true);
+        }
       } catch (error) {
         console.error('Error occurred:', error);
+        setSubmissionSuccess(true);
+        setErrorSendingEmail(true);
       }
     };
   
@@ -90,7 +97,7 @@ function HomePage(props) {
             {/* <div className='flex bg-black'>
                 <img className='opacity-85' src={require('../Assets/Images/p1.jpeg')}/>
             </div> */}
-
+        { !submissionSuccess &&
            <div id='contactUs' className='flex justify-center items-center flex-col bg-[#191820] pt-10 pb-20'>
                     <h1 className='font-[InknutAntiqua] tracking-wider  text-center text-3xl  md:text-4xl text-[#fff]'>
                         Contact Us:
@@ -99,7 +106,7 @@ function HomePage(props) {
                         For more information fill out this form and we will reach out to you!
                     </p>
                     
-                    <form className='mt-5 font-[Inder] pl-10 pr-10 flex flex-col justify-center w-screen pt-3 gap-3 max-w-[700px]'>
+                    <form onSubmit={(e)=>e.preventDefault()} className='mt-5 font-[Inder] pl-10 pr-10 flex flex-col justify-center w-screen pt-3 gap-3 max-w-[700px]'>
                         <input onChange={(e)=>setName(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true'type='name' name='name' placeholder='Full Name'/>
                         <input onChange={(e)=>setEmail(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='email' name='email' placeholder='Email'/>
                         <input onChange={(e)=>setPhone(e.target.value)} className='h-12 p-3 rounded-lg outline-none text-lg' required='true' type='phone' name='phone' placeholder='Phone number'/>
@@ -112,7 +119,7 @@ function HomePage(props) {
                             <option value="500+">500+</option>
                         </select>
                         <div className='flex gap-3'>
-                            <input onChange={(e)=>setEventDate(e.target.value)}  type="date" id="eventDate" name="date"class="flex-1 h-12 p-3 rounded-lg outline-none" required />
+                            <input onChange={(e)=>setEventDate(e.target.value)}  type="date" id="eventDate" name="date" min={new Date().toISOString().split('T')[0]} defaultValue={new Date().toISOString().split('T')[0]} class="flex-1 h-12 p-3 rounded-lg outline-none" required />
                             <input onChange={(e)=>{
                                         const inputTime = e.target.value;
                                         const timeParts = inputTime.split(':');
@@ -131,17 +138,26 @@ function HomePage(props) {
                                         }
                                         const formattedTime = `${hours}:${minutes} ${suffix}`;
                                     setEventTime(formattedTime)
-                                }} placeholder='' type="time" id="eventDate" name="time" class="flex-1 h-12 p-3 rounded-lg outline-none" required />
+                                }}  type="time" id="eventDate" name="time" defaultValue={'12:00'} class="flex-1 h-12 p-3 rounded-lg outline-none" required />
                         </div>
-
                         {notFiled&&<p className='pt-2 pb-2 font-[Inder] tracking-wider  text-center text-l text-[#ff2a2a] bg-red-100 rounded-lg border-[#ff2a2a] border-2'>
-                            Opps you are missing something!<br></br>Please fill out everything!
+                            Please fill out everything!<br/>Make sure date & time as well.
                         </p>}
-
                         <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' required='true' type={'submit'} value={'Send'}/>
                     </form>
-           </div>
+                </div>
+            }
 
+            {submissionSuccess &&
+
+                <div className='w-full p-10 flex justify-center items-center flex-col bg-[#191820] pt-10 pb-20'>
+                        
+                        {ErrorSendingEmail?<h1 className='font-[InknutAntiqua] tracking-wider  text-center text-2xl  md:text-3xl text-[#fff]'><span className='text-red-400'>Sorry!</span><br/>Error occurred, you can still contact us directly on:  <br/><span onClick={()=> {
+                            window.location.href = `mailto:${"shaktiflowentertainment@gmail.com"}?subject=${encodeURIComponent("")}`;
+                        }} className='text-sm text-blue-600 hover:cursor-pointer underline'>shaktiflowentertainment@gmail.com</span></h1>:
+                        <h1 className='font-[InknutAntiqua] tracking-wider  text-center text-2xl  md:text-3xl text-[#fff]'><span className='text-blue-300'>Thank you :)</span><br/>We have received your form, we will reach out to you soon!</h1>}
+                </div>
+            }
             <footer className='bg-[#101010] h-24 text-center p-5 space-y-2'>
                 <p className='text-white text-xs'>© 2024 - Shakti Flow Entertainment - All right reserves</p>
                 <p className='text-[#979797] text-xs'>Developer: Deep Parmar; Images: unsplash.com</p>
