@@ -160,7 +160,7 @@ function HomePage(props) {
             }
             <footer className='bg-[#101010] h-24 text-center p-5 space-y-2'>
                 <p className='text-white text-xs'>© 2024 - Shakti Flow Entertainment - All right reserves</p>
-                <p className='text-[#979797] text-xs'>Developer: Deep Parmar; Images: unsplash.com</p>
+                <p className='text-[#979797] text-xs'>Developer: Deep Parmar</p>
             </footer>
         </>
     );
