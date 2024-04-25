@@ -39,7 +39,7 @@ function HomePage(props) {
       };
   
       try {
-        const response = await axios.post('http://shaktiflowdj.com//ess', data);
+        const response = await axios.post('http://shaktiflowdj.com/api/ess', data);
         setResponseMessage(response.data);
         if(responseMessage) 
         {
