@@ -3,7 +3,7 @@ import SmallImage from '../Components/SmallImage';
 import axios from 'axios';
 
 function HomePage(props) {
-    const [date] = useState(Date.now('dd/mm/yyyy'));
+    // const [date] = useState(Date.now('dd/mm/yyyy'));
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -43,6 +43,7 @@ function HomePage(props) {
         const response = await axios.post('https://ess-latest.onrender.com/api/ess', data);
         setResponseMessage(response.data);
         setSubmissionSuccess(true);
+        console.log(responseMessage)
       } catch (error) {
         console.error('Error occurred:', error);
         setSubmissionSuccess(true);
