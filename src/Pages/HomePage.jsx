@@ -39,7 +39,7 @@ function HomePage(props) {
       };
   
       try {
-        const response = await axios.post('http://localhost:8080/api/ess', data);
+        const response = await axios.post('https://ess-latest.onrender.com/api/ess', data);
         setResponseMessage(response.data);
         if(responseMessage) 
         {
