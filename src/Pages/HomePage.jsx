@@ -17,12 +17,13 @@ function HomePage(props) {
     const [submissionSuccess, setSubmissionSuccess] = useState(false);
     const [ErrorSendingEmail, setErrorSendingEmail] = useState(false);
 
-    const [responseMessage, setResponseMessage] = useState('');
-  
+    const [responseMessage, setResponseMessage] = useState();
+    const [loading, setLoading] = useState(false);
+
     const handleSendData = async () => {
+        setLoading(true);
         if (name === "" || email === "" || phone === "" || eventType === "" || numOfGuests === "# of Guests" || numOfGuests === "" || eventDate === "" || eventTime === "")
         {
-            
             setNotFiled(true);
             return
         }
@@ -39,6 +40,7 @@ function HomePage(props) {
       };
   
       try {
+        // const response = await axios.post('http://localhost:8080/api/ess', data);
         const response = await axios.post('https://ess-latest.onrender.com/api/ess', data);
         setResponseMessage(response.data);
         if(responseMessage) 
@@ -50,6 +52,9 @@ function HomePage(props) {
         setSubmissionSuccess(true);
         setErrorSendingEmail(true);
       }
+      finally {
+            setLoading(false);
+        }
     };
   
 
@@ -143,7 +148,7 @@ function HomePage(props) {
                         {notFiled&&<p className='pt-2 pb-2 font-[Inder] tracking-wider  text-center text-l text-[#ff2a2a] bg-red-100 rounded-lg border-[#ff2a2a] border-2'>
                             Please fill out everything!<br/>Make sure date & time as well.
                         </p>}
-                        <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' required='true' type={'submit'} value={'Send'}/>
+                        <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' disabled={loading} style={{opacity: loading?0.2:1}} required='true' type={'submit'} value={'Send'}/>
                     </form>
                 </div>
             }
