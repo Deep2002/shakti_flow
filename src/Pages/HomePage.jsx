@@ -4,7 +4,6 @@ import axios from 'axios';
 
 function HomePage(props) {
     const [date] = useState(Date.now('dd/mm/yyyy'));
-    console.log(date);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -20,14 +19,14 @@ function HomePage(props) {
     const [responseMessage, setResponseMessage] = useState();
     const [loading, setLoading] = useState(false);
 
-    const handleSendData = async () => {
-        setLoading(true);
-        if (name === "" || email === "" || phone === "" || eventType === "" || numOfGuests === "# of Guests" || numOfGuests === "" || eventDate === "" || eventTime === "")
+    const handleSendData = async (e) => {
+
+        if (name === "" || email === "" || phone === "" || eventType === "" || numOfGuests === "# of guests" || eventDate === "" || eventTime === "")
         {
             setNotFiled(true);
             return
         }
-
+        setLoading(true);
 
       const data = {
         name: name,
@@ -43,10 +42,7 @@ function HomePage(props) {
         // const response = await axios.post('http://localhost:8080/api/ess', data);
         const response = await axios.post('https://ess-latest.onrender.com/api/ess', data);
         setResponseMessage(response.data);
-        if(responseMessage) 
-        {
-            setSubmissionSuccess(true);
-        }
+        setSubmissionSuccess(true);
       } catch (error) {
         console.error('Error occurred:', error);
         setSubmissionSuccess(true);
