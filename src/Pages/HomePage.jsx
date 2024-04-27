@@ -145,7 +145,10 @@ function HomePage(props) {
                         {notFiled&&<p className='pt-2 pb-2 font-[Inder] tracking-wider  text-center text-l text-[#ff2a2a] bg-red-100 rounded-lg border-[#ff2a2a] border-2'>
                             Please fill out everything!<br/>Make sure date & time as well.
                         </p>}
-                        <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' disabled={loading} style={{opacity: loading?0.2:1}} required='true' type={'submit'} value={'Send'}/>
+                        {loading&&<span className='flex justify-center items-center gap-2'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="none" stroke="white" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2.95" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>
+                            </span>}
+                        <input onClick={handleSendData} className='bg-[#0069E4] h-12 p-3 mt-3 rounded-lg outline-none text-white text-lg hover:cursor-pointer' disabled={loading} style={{opacity: loading?0.2:1}} required='true' type={'submit'} value={'Send'}></input>
                     </form>
                 </div>
             }
