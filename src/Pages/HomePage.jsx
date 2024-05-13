@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SmallImage from '../Components/SmallImage';
 import axios from 'axios';
 
@@ -18,6 +18,20 @@ function HomePage(props) {
 
     const [responseMessage, setResponseMessage] = useState();
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        // Function to call API
+        const fetchData = async () => {
+          try {
+            await fetch('https://ess-bugfixed.onrender.com/api/wakeUp');
+          } catch (error) {
+            console.error('(WakeUp failed):', error);
+          }
+        };
+    
+        fetchData();
+
+      }, []);
 
     const handleSendData = async (e) => {
 
@@ -68,7 +82,7 @@ function HomePage(props) {
             <div className='w-full min-h-[75%] bg-[#191820] scroll-smooth'>
                 <img className='h-[400px]   w-full object-cover' src={require('../Assets/Images/poster.jpeg')} alt="poster.jpeg" />
                 <div className='h-[400px]   w-full absolute top-0 flex justify-center items-center flex-col gap-8' style={{ background: 'linear-gradient(to bottom, rgba(25, 24, 32, 0), rgba(0,0,0,0), rgba(25, 24, 32, 1))' }}>
-                    <img className='w-40 h-40 mt-64' src={require('../Assets/Images/logo.png')} alt='logo.png'/>
+                    <img className='w-40 h-40 mt-64 rounded-full shadow-lg' src={require('../Assets/Images/logo2.png')} alt='logo.png'/>
                     <h1 className='font-[InknutAntiqua] tracking-wider  text-center text-4xl pl-10 pr-10 md:text-5xl text-[#fff]'>
                         Shakti Flow Entertainment
                     </h1>
