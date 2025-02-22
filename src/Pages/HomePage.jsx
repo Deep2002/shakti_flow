@@ -119,7 +119,7 @@ function HomePage(props) {
                         Contact Us:
                     </h1>
                     <p className='pt-5 font-[Inder] tracking-wider  text-center text-l pl-10 pr-10 text-[#989898]'>
-                        For more information fill out this form and we will reach out to you!
+                        For more information contact us: 214-454-9325 / Shaktiflowentertainment@gmail.com
                     </p>
                     
                     <form onSubmit={(e)=>e.preventDefault()} className='mt-5 font-[Inder] pl-10 pr-10 flex flex-col justify-center w-screen pt-3 gap-3 max-w-[700px]'>
